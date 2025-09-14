@@ -1,6 +1,6 @@
 {
-  "name": "R Music",
-  "short_name": "R Music",
+  "name": "Echoverse",
+  "short_name": "Echoverse",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
