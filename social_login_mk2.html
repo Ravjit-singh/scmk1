@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Social App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *:before, *:after {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #080710;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+    .background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .background .shape {
+      height: 200px;
+      width: 200px;
+      position: absolute;
+      border-radius: 50%;
+      animation: float 8s infinite ease-in-out;
+    }
+    .shape:first-child {
+      background: linear-gradient(#1845ad, #23a2f6);
+      left: -80px;
+      top: -80px;
+      animation-delay: 0s;
+    }
+    .shape:last-child {
+      background: linear-gradient(to right, #ff512f, #f09819);
+      right: -30px;
+      bottom: -80px;
+      animation-delay: 3s;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-40px) scale(1.1); }
+    }
+    form {
+      width: 100%;
+      max-width: 400px;
+      background-color: rgba(255,255,255,0.13);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 40px rgba(8,7,16,0.6);
+      padding: 40px 30px;
+      animation: fadeIn 1.2s ease forwards;
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    form h3 {
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 36px;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
+      animation: slideIn 1s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+    }
+    input {
+      display: block;
+      height: 45px;
+      width: 100%;
+      background-color: rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 0 12px;
+      margin-top: 6px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      color: #fff;
+      border: none;
+      transition: all 0.3s ease;
+    }
+    input:focus {
+      background-color: rgba(255,255,255,0.15);
+      transform: scale(1.02);
+    }
+    ::placeholder {
+      color: #e5e5e5;
+    }
+    button {
+      margin-top: 30px;
+      width: 100%;
+      background-color: #ffffff;
+      color: #080710;
+      padding: 12px 0;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 20px;
+      cursor: pointer;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+      animation: popIn 1s ease;
+    }
+    button:hover {
+      background-color: #23a2f6;
+      color: #fff;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(35,162,246,0.5);
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .social {
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .social div {
+      flex: 1;
+      border-radius: 13px;
+      padding: 10px;
+      background-color: rgba(255,255,255,0.27);
+      color: #eaf0fb;
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .social div:hover {
+      background-color: rgba(255,255,255,0.47);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(255,255,255,0.3);
+    }
+    .social i {
+      margin-right: 6px;
+    }
+    @media (max-width: 480px) {
+      form {
+        padding: 30px 20px;
+      }
+      form h3 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <form id="loginForm">
+    <h3>Login</h3>
+
+    <label for="username">Username</label>
+    <input type="text" placeholder="Enter Username" id="username" required>
+
+    <label for="email">Email</label>
+    <input type="email" placeholder="Enter Email" id="email" required>
+
+    <label for="password">Password</label>
+    <input type="password" placeholder="Enter Password" id="password" required>
+
+    <button type="submit">Log In</button>
+
+    <div class="social">
+      <div class="go"><i class="fab fa-google"></i> Google</div>
+      <div class="fb"><i class="fab fa-facebook"></i> Facebook</div>
+    </div>
+  </form>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqfzqYiMLXCVZMV9E6Ms-9TJ8bxYd9bPilJAYXsxTfE8qCbIvzLUKQMRqY1l5lc7zjuw/exec";
+
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !email || !password) {
+        alert("Please fill out all fields!");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=loginUser&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+        const result = await response.json();
+
+        if (result.success) {
+          alert("Login Successful! Welcome " + result.username);
+
+          // Save login session data
+          localStorage.setItem("userID", result.userID);
+          localStorage.setItem("username", result.username);
+
+          // Redirect to feed page
+          window.location.href = "feed.html";
+        } else {
+          alert(result.message || "Invalid login credentials.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error connecting to server!");
+      }
+    });
+  </script>
+</body>
+</html>

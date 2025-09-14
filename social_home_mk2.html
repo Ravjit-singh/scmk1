@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Social Media App UI</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/9f37ddf547.js"></script>
+
+  <!-- Combined CSS -->
+  <style>
+    /* ===== YOUR ORIGINAL UI STYLES ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Montserrat"; background: #242c39; color: #fff; }
+    .live { height: 120px; width: 100%; display: flex; justify-content: space-between; overflow-x: scroll; padding: 30px 0 0 20px; margin-bottom: 20px; }
+    .live .person { position: relative; margin-right: 30px; text-align: center; }
+    .live .profile-pic { position: relative; background-position: 50%; background-size: cover; height: 40px; width: 40px; border-radius: 50%; }
+    .live .profile-pic::before { content: ""; display: inline-block; border: 3px solid #454d5a; padding: 24px; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .live .person .name { font-size: 12px; padding-top: 20px; }
+    .live-active .profile-pic:before { border-color: #ffdf3b !important; }
+    .live-active span { background: #ffdf3b; color: #000; width: 50px; display: inline-block; font-size: 10px; border-radius: 50px; padding: 2px 0; font-weight: 600; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .newsfeed { padding: 0 20px; }
+    .card { width: 100%; background: #242c39; box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.5); margin-bottom: 20px; border-radius: 10px; font-size: 14px; }
+    .card .picture { background-position: 50%; background-size: cover; height: 200px; width: 100%; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    .card .content { display: flex; flex-direction: column; padding: 15px 10px; }
+    .card .header { display: flex; align-items: center; }
+    .card .profile-pic { background-position: 50%; background-size: cover; height: 50px; width: 50px; border-radius: 50%; }
+    .card .detail { margin-left: 10px; }
+    .card .posted { font-size: 10px; padding-top: 3px; }
+    .card .desc { padding-top: 10px; line-height: 1.5; }
+    .card .tags { font-size: 12px; color: #ffdf3b; padding-top: 10px; }
+    .card .footer { display: flex; justify-content: space-between; padding-top: 20px; }
+    .card .footer .like { flex: 0 0 25%; }
+    .card .footer .comment { flex: 1; }
+    .card .footer .share { flex: 0 0 18%; }
+    .nav { background: #242c39; height: 80px; width: 100%; display: flex; justify-content: space-around; align-items: center; position: fixed; bottom: 0; box-shadow: 0 -4px 25px 0 rgba(0, 0, 0, 0.12); }
+    .nav .icon { flex: 1; text-align: center; color: #8e919a; }
+    .nav .icon i { padding-bottom: 10px; font-size: 20px; }
+    .nav .icon p { font-size: 12px; }
+    .active { color: #ffdf3b !important; }
+    ::-webkit-scrollbar { display: none; }
+    .space { height: 200px; }
+    /* ===== Floating Button ===== */
+    .open-post-modal {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    background: #ffdf3b;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    z-index: 1000;
+    transition: 0.3s;
+    }
+    .open-post-modal:hover {
+    background: #ffd633;
+    }
+    
+    /* ===== Modal Overlay ===== */
+    .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+    }
+    
+    /* ===== Modal Content ===== */
+    .modal-content {
+    background: #2e3746;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    transform: translateY(50px);
+    animation: slideUp 0.3s ease-in-out forwards;
+    }
+    @keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+    }
+    
+    /* ===== Close Button ===== */
+    .close-btn {
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    align-self: flex-end;
+    }
+    
+    /* ===== Form Elements ===== */
+    .modal-content textarea,
+    .modal-content input {
+    background: #242c39;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    }
+    
+    .modal-content textarea::placeholder,
+    .modal-content input::placeholder {
+    color: #aaa;
+    }
+    
+    /* ===== Submit Button ===== */
+    .modal-content .submit-btn {
+    background: #ffdf3b;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    }
+    
+    .modal-content .submit-btn:hover {
+    background: #ffd633;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Live Stories Section -->
+  <section class="live">
+    <div class="person"><div class="profile-pic"></div><p class="name">Ravjit</p></div>
+    <div class="person live-active"><div class="profile-pic"></div><p class="name">Aditya</p><span><i class="fas fa-video"></i> Live</span></div>
+    <div class="person"><div class="profile-pic"></div><p class="name">Aman</p></div>
+    <div class="person"><div class="profile-pic"></div><p class="name">Harshit</p></div>
+    <div class="person"><div class="profile-pic"></div><p class="name">Ravi</p></div>
+    <div class="person"><div class="profile-pic"></div><p class="name">Naman</p></div>
+    <div class="person"><div class="profile-pic"></div><p class="name">Manav</p></div>
+    <div class="person"><div class="profile-pic"></div><p class="name">Nikhil</p></div>
+  
+  </section>
+
+  <!-- Newsfeed Section -->
+  <section class="newsfeed" id="feedArea">
+    <!-- Real posts will be injected here dynamically -->
+  </section>
+
+  <!-- Navigation Bar -->
+  <section class="nav">
+    <div class="icon active"><i class="fas fa-fire"></i><p>Home</p></div>
+    <div class="icon"><i class="fas fa-globe"></i><p>Live</p></div>
+    <div class="icon"><i class="fas fa-comment-dots"></i><p>Chats</p></div>
+    <div class="icon"><i class="fas fa-bell"></i><p>Notifications</p></div>
+    <div class="icon"><i class="fas fa-user"></i><p>Profile</p></div>
+  
+  </section>
+
+  <div class="space"></div>
+<!-- ===== Create Post Button ===== -->
+<button class="open-post-modal" onclick="openPostModal()">
+  <i class="fas fa-plus"></i> 
+</button>
+
+<!-- ===== Create Post Modal ===== -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closePostModal()">&times;</span>
+    <h2>Create a Post</h2>
+    
+    <textarea id="postContent" placeholder="What's on your mind?" maxlength="280"></textarea>
+    <input id="postImageURL" type="text" placeholder="Image URL (optional)">
+    
+    <button class="submit-btn" onclick="submitPost()">Post</button>
+  </div>
+</div>
+  <!-- AnimeJS Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.js"></script>
+
+  <!-- Original Animations -->
+  <script>
+    anime({ targets: ".nav .icon i", translateX: [100, 0], duration: 1200, opacity: [0, 1], delay: (el, i) => 300 + 100 * i });
+    anime({ targets: ".nav .icon p", duration: 1200, opacity: [0, 1], delay: 700 });
+    anime({ targets: ".live .person", translateY: [100, 0], duration: 1200, delay: (el, i) => 1000 + 100 * i });
+  </script>
+
+  <!-- === ADDED BACKEND INTEGRATION === -->
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqfzqYiMLXCVZMV9E6Ms-9TJ8bxYd9bPilJAYXsxTfE8qCbIvzLUKQMRqY1l5lc7zjuw/exec";
+
+    // Check login
+    const username = localStorage.getItem("username");
+    const userID = localStorage.getItem("userID");
+
+    if (!username || !userID) {
+      alert("Please login first!");
+      window.location.href = "social_login_mk2.html";
+    }
+
+    // Fetch feed dynamically
+    async function fetchFeed() {
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=fetchFeed&userID=${encodeURIComponent(userID)}`);
+        const posts = await response.json();
+
+        const feedArea = document.getElementById("feedArea");
+        feedArea.innerHTML = "";
+
+        if (!Array.isArray(posts) || posts.length === 0) {
+          feedArea.innerHTML = `<p style="text-align:center; color:#888;">No posts yet. Be the first to post!</p>`;
+          return;
+        }
+
+        posts.forEach(post => {
+          const card = document.createElement("div");
+          card.classList.add("card");
+
+          card.innerHTML = `
+            <div class="picture" style="background-image: url('${post.imageURL || 'https://via.placeholder.com/600'}');"></div>
+            <div class="content">
+              <div class="header">
+                <div class="profile-pic" style="background-image: url('https://via.placeholder.com/50');"></div>
+                <div class="detail">
+          <p class="name">${sanitize(post.username)}</p>
+                  <p class="posted">${formatTime(post.timestamp)}</p>
+                </div>
+              </div>
+              <div class="desc">${sanitize(post.content)}</div>
+              <div class="footer">
+                <div class="like"><i class="fas fa-heart"></i><span>0</span></div>
+                <div class="comment"><i class="fas fa-comment"></i><span>0</span></div>
+                <div class="share"><i class="fas fa-share"></i><span>0</span></div>
+              </div>
+            </div>
+          `;
+          feedArea.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error loading feed:", error);
+        alert("Failed to load posts. Please try again later.");
+      }
+    }
+
+    // Helpers
+    function formatTime(timestamp) {
+      if (!timestamp) return "Just now";
+      return new Date(timestamp).toLocaleString();
+    }
+    function sanitize(str) {
+      return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", fetchFeed);
+  // === Modal Control ===
+// === Modal Control ===
+function openPostModal() {
+  document.getElementById("postModal").style.display = "flex";
+}
+
+function closePostModal() {
+  document.getElementById("postModal").style.display = "none";
+}
+
+// Close modal if user clicks outside
+window.addEventListener("click", function(event) {
+  const modal = document.getElementById("postModal");
+  if (event.target === modal) {
+    closePostModal();
+  }
+});
+async function submitPost() {
+  const content = document.getElementById("postContent").value.trim();
+  const imageURL = document.getElementById("postImageURL").value.trim();
+
+  if (!content) {
+    alert("Please write something to post!");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${SCRIPT_URL}?action=createPost&userID=${encodeURIComponent(userID)}&content=${encodeURIComponent(content)}&imageURL=${encodeURIComponent(imageURL)}`);
+    const result = await response.json();
+
+    if (result.success) {
+      alert("Post created successfully!");
+      document.getElementById("postContent").value = "";
+      document.getElementById("postImageURL").value = "";
+      closePostModal(); // Close modal after successful post
+      fetchFeed(); // Refresh feed
+    } else {
+      alert("Failed to create post. Try again!");
+    }
+  } catch (error) {
+    console.error("Error creating post:", error);
+    alert("Error connecting to server.");
+  }
+}
+  </script>
+</body>
+</html>
